@@ -1,0 +1,62 @@
+<div class="mb-3">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label for="@Id" class="form-label d-flex align-items-center justify-content-between">
+            <span>
+                @Label
+                @if (Required)
+                {
+                    <span class="text-danger ms-1" title="שדה חובה">*</span>
+                }
+            </span>
+            @if (!string.IsNullOrWhiteSpace(HelpText))
+            {
+                <small class="text-secondary opacity-75 font-code" style="font-size: 0.78rem;">@HelpText</small>
+            }
+        </label>
+    }
+
+    <div class="input-group">
+        @if (!string.IsNullOrWhiteSpace(Icon))
+        {
+            <span class="input-group-text bg-dark border-secondary border-opacity-25 text-secondary">
+                <span class="material-symbols-outlined" style="font-size: 1.15rem;">@Icon</span>
+            </span>
+        }
+        <input id="@Id"
+               type="@Type"
+               dir="@Dir"
+               placeholder="@Placeholder"
+               class="form-control form-control-lg @(string.IsNullOrWhiteSpace(ErrorMessage) ? "" : "is-invalid")"
+               value="@Value"
+               @oninput="HandleInput" />
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <div class="invalid-feedback d-block mt-1">
+            <span class="material-symbols-outlined align-middle" style="font-size: 1rem;">error</span>
+            <span class="align-middle">@ErrorMessage</span>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; } = $"field-{Guid.NewGuid():N}";
+    [Parameter] public string Label { get; set; } = string.Empty;
+    [Parameter] public string Type { get; set; } = "text";
+    [Parameter] public string Dir { get; set; } = "rtl";
+    [Parameter] public string Placeholder { get; set; } = string.Empty;
+    [Parameter] public string Value { get; set; } = string.Empty;
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public bool Required { get; set; } = false;
+    [Parameter] public string? ErrorMessage { get; set; }
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public string? HelpText { get; set; }
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        Value = e.Value?.ToString() ?? string.Empty;
+        await ValueChanged.InvokeAsync(Value);
+    }
+}

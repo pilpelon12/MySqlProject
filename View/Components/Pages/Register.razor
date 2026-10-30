@@ -1,0 +1,84 @@
+@page "/register"
+
+<PageTitle>הרשמה למגמת מדעי המחשב</PageTitle>
+
+<div class="container py-5 my-auto">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-7 col-lg-5">
+            <!-- כותרת עליונה בסגנון טרמינל -->
+            <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                <div class="d-flex align-items-center gap-1 text-secondary">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">terminal</span>
+                    <span class="font-code small text-uppercase">CS_AUTH // REGISTER_v4</span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="badge rounded-pill bg-success bg-opacity-25 text-success small">מערכת פעילה</span>
+                </div>
+            </div>
+
+            <!-- כרטיס ההרשמה הראשי -->
+            <div class="card card-portal p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="icon-box mx-auto mb-3 bg-primary bg-opacity-15 text-primary">
+                        <span class="material-symbols-outlined">person_add</span>
+                    </div>
+                    <h1 class="h3 fw-bold text-light mb-1">הרשמה למערכת המגמה</h1>
+                    <p class="text-secondary opacity-75 small">
+                        הצטרפו לפלטפורמת הלמידה והגשת התרגילים ב-C#
+                    </p>
+                </div>
+
+                <form>
+                    <!-- שדה 1: שם משתמש -->
+                    <Field Id="reg-username"
+                           Label="שם משתמש"
+                           Placeholder="למשל: noam_csharp"
+                           Icon="person"
+                           Required="true"
+                           HelpText="באנגלית ובאותיות קטנות" />
+
+                    <!-- שדה 2: אימייל (משמאל לימין) -->
+                    <Field Id="reg-email"
+                           Label="כתובת אימייל"
+                           Type="email"
+                           Dir="ltr"
+                           Placeholder="student@cs-dept.edu"
+                           Icon="mail"
+                           Required="true" />
+
+                    <!-- שדה 3: סיסמה (משמאל לימין) -->
+                    <Field Id="reg-password"
+                           Label="סיסמה"
+                           Type="password"
+                           Dir="ltr"
+                           Placeholder="לפחות 6 תווים"
+                           Icon="lock"
+                           Required="true" />
+
+                    <!-- שדה 4: אימות סיסמה (משמאל לימין) -->
+                    <Field Id="reg-confirm-password"
+                           Label="אימות סיסמה"
+                           Type="password"
+                           Dir="ltr"
+                           Placeholder="הזינו שוב את הסיסמה"
+                           Icon="lock_reset"
+                           Required="true" />
+
+                    <!-- כפתור הרשמה (בשלב זה type="button" כנדרש בגרסה 4) -->
+                    <button type="button" class="btn btn-primary btn-lg w-100 mt-3 py-2 fw-semibold">
+                        <span class="align-middle">צור חשבון חדש</span>
+                        <span class="material-symbols-outlined align-middle ms-1" style="font-size: 19px;">arrow_back</span>
+                    </button>
+                </form>
+
+                <!-- קישור לכניסה מתחת לטופס -->
+                <div class="text-center mt-4 pt-2 border-top border-secondary border-opacity-10">
+                    <span class="text-secondary opacity-75 small">כבר יש לך חשבון במגמה?</span>
+                    <a href="/login" class="text-info fw-semibold text-decoration-none ms-1 small">
+                        התחבר כאן
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

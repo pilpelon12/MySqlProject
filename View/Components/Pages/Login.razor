@@ -1,0 +1,78 @@
+@page "/login"
+
+<PageTitle>כניסה למגמת מדעי המחשב</PageTitle>
+
+<div class="container py-5 my-auto">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-7 col-lg-5">
+            <!-- כותרת עליונה בסגנון טרמינל -->
+            <div class="d-flex align-items-center justify-content-between mb-3 px-1">
+                <div class="d-flex align-items-center gap-1 text-secondary">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">terminal</span>
+                    <span class="font-code small text-uppercase">CS.ACADEMY // LOGIN_PORTAL</span>
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    <span class="badge rounded-pill bg-info bg-opacity-25 text-info small">גרסה 4</span>
+                </div>
+            </div>
+
+            <!-- כרטיס הכניסה הראשי -->
+            <div class="card card-portal p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <div class="icon-box mx-auto mb-3 bg-secondary bg-opacity-15 text-secondary">
+                        <span class="material-symbols-outlined">login</span>
+                    </div>
+                    <h1 class="h3 fw-bold text-light mb-1">כניסה למערכת המגמה</h1>
+                    <p class="text-secondary opacity-75 small">
+                        התחברו לצפייה במשימות, תרגול והגשת פתרונות
+                    </p>
+                </div>
+
+                <form>
+                    <!-- שדה 1: שם משתמש או אימייל -->
+                    <Field Id="login-username"
+                           Label="שם משתמש או אימייל"
+                           Placeholder="למשל: student_noam או אימייל"
+                           Icon="person"
+                           Required="true" />
+
+                    <!-- שדה 2: סיסמה (משמאל לימין) -->
+                    <Field Id="login-password"
+                           Label="סיסמה"
+                           Type="password"
+                           Dir="ltr"
+                           Placeholder="••••••••"
+                           Icon="lock"
+                           Required="true" />
+
+                    <!-- זכור אותי וקישור שכחתי סיסמה -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 small">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                            <label class="form-check-label text-secondary opacity-75" for="rememberMe">
+                                זכור אותי במחשב זה
+                            </label>
+                        </div>
+                        <a href="javascript:void(0)" class="text-secondary text-decoration-none opacity-75">
+                            שכחת סיסמה?
+                        </a>
+                    </div>
+
+                    <!-- כפתור כניסה (בשלב זה type="button" כנדרש בגרסה 4) -->
+                    <button type="button" class="btn btn-primary btn-lg w-100 mt-2 py-2 fw-semibold">
+                        <span class="align-middle">התחברות למערכת</span>
+                        <span class="material-symbols-outlined align-middle ms-1" style="font-size: 19px;">login</span>
+                    </button>
+                </form>
+
+                <!-- קישור להרשמה מתחת לטופס -->
+                <div class="text-center mt-4 pt-2 border-top border-secondary border-opacity-10">
+                    <span class="text-secondary opacity-75 small">עדיין אין לך חשבון?</span>
+                    <a href="/register" class="text-info fw-semibold text-decoration-none ms-1 small">
+                        הרשמה למגמה
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,25 @@
 @API_HostAddress = http://localhost:5099
 
-GET {{API_HostAddress}}/weatherforecast/
+### שליפת כל המשתמשים
+GET {{API_HostAddress}}/api/users
 Accept: application/json
 
-###
+### התחברות תקינה (של משתמש הבדיקה שהזנו במסד)
+POST {{API_HostAddress}}/api/users/login
+Content-Type: application/json
+
+{
+  "username": "student_noam",
+  "password": "Stud123!"
+}
+
+### הוספת משתמש חדש
+POST {{API_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "username": "new_student",
+  "email": "new@student.edu",
+  "password": "Password123!",
+  "roleName": "Student"
+}

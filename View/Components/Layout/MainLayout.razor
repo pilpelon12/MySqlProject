@@ -1,23 +1,63 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<div class="d-flex flex-column min-vh-100">
+    <!-- Navbar עליון קבוע -->
+    <header class="navbar-portal sticky-top">
+        <div class="container d-flex justify-content-between align-items-center py-2">
+            <div class="d-flex align-items-center gap-3">
+                <Logo />
+                
+                <nav class="d-none d-md-flex align-items-center gap-1 ms-3">
+                    <a href="/" class="nav-link-portal">ראשי</a>
+                    <a href="#topics" class="nav-link-portal">נושאי לימוד</a>
+                    <a href="#exercises" class="nav-link-portal">מעבדה ותרגול</a>
+                    <a href="#workflow" class="nav-link-portal">איך זה עובד</a>
+                </nav>
+            </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="/login" class="btn btn-outline-primary btn-sm px-3">כניסה למערכת</a>
+                <a href="/register" class="btn btn-primary btn-sm px-3">הרשמה למגמה</a>
+            </div>
         </div>
+    </header>
 
-        <article class="content px-4">
-            @Body
-        </article>
+    <!-- גוף הדף הראשי -->
+    <main class="flex-grow-1">
+        @Body
     </main>
+
+    <!-- תחתית האתר (Footer) -->
+    <footer class="py-4 border-top border-secondary border-opacity-10 mt-auto" style="background-color: #080e1d;">
+        <div class="container">
+            <div class="row align-items-center gy-3">
+                <div class="col-md-6 text-center text-md-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+                        <span class="material-symbols-outlined text-secondary" style="font-size: 20px;">terminal</span>
+                        <span class="fw-semibold text-light">מגמת מדעי המחשב</span>
+                        <span class="text-secondary small font-code">// תשפ"ז</span>
+                    </div>
+                    <p class="text-secondary opacity-75 small mb-0 mt-1">
+                        פלטפורמת למידה, ניהול משימות והגשות תרגילים ב-C# ו-MySQL | פרויקט גמר הנדסת תוכנה
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3 small">
+                        <a href="/" class="text-secondary text-decoration-none">דף הבית</a>
+                        <a href="/login" class="text-secondary text-decoration-none">כניסת תלמידים ומורים</a>
+                        <a href="/register" class="text-secondary text-decoration-none">הרשמה</a>
+                    </div>
+                    <div class="text-secondary opacity-50 small mt-1 font-code">
+                        &copy; 2026 CS-IL Academy. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
+    אירעה שגיאה בלתי צפויה במערכת.
+    <a href="." class="reload">רענן דף</a>
+    <span class="dismiss">✕</span>
 </div>

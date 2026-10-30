@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
 namespace DAL
@@ -19,7 +19,7 @@ namespace DAL
             // 2. יצירת הטבלאות
             await CreateTablesAsync(fullConnString);
 
-            // 3. הזנת נתוני ברירת מחדל (תפקידים, משתמשים ונושאי לימוד)
+            // 3. הזנת נתוני ברירת מחדל
             await SeedInitialDataAsync(fullConnString);
         }
 
@@ -38,7 +38,6 @@ namespace DAL
             using var connection = new MySqlConnection(fullConnString);
             await connection.OpenAsync();
 
-            // שאילתה ליצירת 7 הטבלאות מנורמלות לפי הסדר הנכון (בגלל מפתחות זרים)
             string createTablesSql = @"
                 -- 1. טבלת תפקידים
                 CREATE TABLE IF NOT EXISTS Roles (
@@ -49,12 +48,13 @@ namespace DAL
                 -- 2. טבלת משתמשים
                 CREATE TABLE IF NOT EXISTS Users (
                     Id INT AUTO_INCREMENT PRIMARY KEY,
-                    FullName VARCHAR(100) NOT NULL,
+                    Username VARCHAR(50) NOT NULL UNIQUE,
                     Email VARCHAR(100) NOT NULL UNIQUE,
                     PasswordHash VARCHAR(255) NOT NULL,
                     RoleId INT NOT NULL,
-                    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (RoleId) REFERENCES Roles(RoleId) ON DELETE RESTRICT
+                    IsActive BOOLEAN NOT NULL DEFAULT TRUE,
+                    CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (RoleId) REFERENCES Roles(RoleId)
                 );
 
                 -- 3. טבלת נושאי לימוד במגמה
@@ -87,7 +87,7 @@ namespace DAL
                     FOREIGN KEY (TopicId) REFERENCES Topics(Id) ON DELETE CASCADE
                 );
 
-                -- 6. טבלה מקשרת: הגשות תרגילים (בין תלמיד לתרגיל)
+                -- 6. טבלה מקשרת: הגשות תרגילים
                 CREATE TABLE IF NOT EXISTS Submissions (
                     Id INT AUTO_INCREMENT PRIMARY KEY,
                     StudentId INT NOT NULL,
@@ -120,19 +120,22 @@ namespace DAL
             using var connection = new MySqlConnection(fullConnString);
             await connection.OpenAsync();
 
-            // 1. הזנת תפקידים בסיסיים
+            // 1. הזנת תפקידים
             string checkRolesSql = "SELECT COUNT(*) FROM Roles;";
             using var checkRolesCmd = new MySqlCommand(checkRolesSql, connection);
             long rolesCount = (long)await checkRolesCmd.ExecuteScalarAsync();
 
             if (rolesCount == 0)
             {
-                string insertRolesSql = "INSERT INTO Roles (RoleId, RoleName) VALUES (1, 'Admin'), (2, 'Student');";
+                string insertRolesSql = "INSERT INTO Roles (RoleId, RoleName) VALUES (1, 'Admin'), (2, 'Teacher'), (3, 'Student');";
                 using var insertRolesCmd = new MySqlCommand(insertRolesSql, connection);
                 await insertRolesCmd.ExecuteNonQueryAsync();
             }
 
-            // 2. הזנת נושא לימוד ראשוני לדוגמה
+            // 2. הזנת משתמשים
+            await SeedUsersAsync(connection);
+
+            // 3. הזנת נושא לימוד ראשוני
             string checkTopicsSql = "SELECT COUNT(*) FROM Topics;";
             using var checkTopicsCmd = new MySqlCommand(checkTopicsSql, connection);
             long topicsCount = (long)await checkTopicsCmd.ExecuteScalarAsync();
@@ -143,6 +146,31 @@ namespace DAL
                 using var insertTopicCmd = new MySqlCommand(insertTopicSql, connection);
                 await insertTopicCmd.ExecuteNonQueryAsync();
             }
+        }
+
+        private static async Task SeedUsersAsync(MySqlConnection connection)
+        {
+            string checkSql = "SELECT COUNT(*) FROM Users;";
+            using var checkCmd = new MySqlCommand(checkSql, connection);
+            long count = Convert.ToInt64(await checkCmd.ExecuteScalarAsync());
+
+            if (count > 0) return;
+
+            string insertSql = @"
+                INSERT INTO Users (Username, Email, PasswordHash, RoleId) VALUES
+                ('admin_coordinator', 'admin@cs-dept.edu', 'Admin123!', 1),
+                ('teacher_dan', 'dan@cs-dept.edu', 'Teach123!', 2),
+                ('teacher_rona', 'rona@cs-dept.edu', 'Teach123!', 2),
+                ('student_noam', 'noam@student.edu', 'Stud123!', 3),
+                ('student_maya', 'maya@student.edu', 'Stud123!', 3),
+                ('student_itay', 'itay@student.edu', 'Stud123!', 3),
+                ('student_shira', 'shira@student.edu', 'Stud123!', 3),
+                ('student_omer', 'omer@student.edu', 'Stud123!', 3),
+                ('student_yael', 'yael@student.edu', 'Stud123!', 3),
+                ('student_guy', 'guy@student.edu', 'Stud123!', 3);";
+
+            using var insertCmd = new MySqlCommand(insertSql, connection);
+            await insertCmd.ExecuteNonQueryAsync();
         }
     }
 }

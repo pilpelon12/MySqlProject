@@ -8,6 +8,15 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// קריאת מחרוזת החיבור מתוך קובץ ההגדרות (appsettings.json או Secrets)
+string? serverConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// מוסיפים למחרוזת את שם מסד הנתונים שיצרנו קודם
+string dbConnectionString = $"{serverConnectionString}Database=CSDepartmentDB;";
+
+// רישום מחלקת UserDB כ"סינגלטון" (מופע אחד שחי כל עוד השרת עובד)
+builder.Services.AddSingleton(new DAL.UserDB(dbConnectionString));
+
 var app = builder.Build();
 
 string connStr = builder.Configuration.GetConnectionString("DefaultConnection");
