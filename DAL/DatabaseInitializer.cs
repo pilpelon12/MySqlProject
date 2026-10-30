@@ -19,7 +19,7 @@ namespace DAL
             // 2. יצירת הטבלאות
             await CreateTablesAsync(fullConnString);
 
-            // 3. הזנת נתוני ברירת מחדל (תפקידים ורכז מגמה ראשוני)
+            // 3. הזנת נתוני ברירת מחדל (תפקידים, משתמשים ונושאי לימוד)
             await SeedInitialDataAsync(fullConnString);
         }
 
