@@ -1,342 +1,78 @@
 @page "/"
 
-<PageTitle>מגמת מדעי המחשב - פורטל הלמידה והפיתוח</PageTitle>
+<PageTitle>מגמת מדעי המחשב - פורטל הלמידה</PageTitle>
 
-<!-- =========================================================================
-     אזור 1: פתיחה (Hero Section)
-     ========================================================================= -->
-<section class="py-5 overflow-hidden">
-    <div class="container py-lg-4">
-        <div class="row align-items-center gy-5">
-            <!-- עמודת טקסט ראשית (col-lg-7) -->
-            <div class="col-12 col-lg-7">
-                <!-- צ'יפ טכנולוגי עליון -->
-                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-dark border border-secondary border-opacity-25 mb-3">
-                    <span class="badge bg-secondary p-1 rounded-circle" style="width: 8px; height: 8px;"></span>
-                    <span class="font-code text-secondary small">PORTAL V4.2 // 5 יחידות לימוד</span>
-                </div>
-
-                <!-- כותרת ראשית -->
-                <h1 class="display-5 fw-bold text-light mb-3 lh-sm">
-                    מגמת מדעי המחשב —<br />
-                    <span class="hero-gradient-text">הדור הבא של הפיתוח ב-C#</span>
-                </h1>
-
-                <!-- פסקת הסבר -->
-                <p class="lead text-secondary opacity-90 mb-4" style="max-width: 600px;">
-                    פלטפורמת למידה, ניהול משימות והגשות אינטראקטיביות לתלמידי ומורי המגמה.
-                    שליטה בתכנות מונחה עצמים (OOP), אלגוריתמיקה מתקדמת ופיתוח פרויקטי גמר מלאים.
-                </p>
-
-                <!-- ענן תגיות טכנולוגיות -->
-                <div class="d-flex flex-wrap gap-2 mb-4">
-                    <span class="tag-tech primary">#CSharp</span>
-                    <span class="tag-tech secondary">#DotNet</span>
-                    <span class="tag-tech success">#Algorithms</span>
-                    <span class="tag-tech primary">#OOP</span>
-                    <span class="tag-tech secondary">#MySQL</span>
-                    <span class="tag-tech">#DataStructures</span>
-                </div>
-
-                <!-- כפתורי הנעה לפעולה -->
-                <div class="d-flex flex-wrap align-items-center gap-3 mb-5">
-                    <a href="/register" class="btn btn-primary btn-lg px-4 py-2">
-                        <span>הרשמה למגמה</span>
-                        <span class="material-symbols-outlined align-middle ms-1" style="font-size: 20px;">terminal</span>
-                    </a>
-                    <a href="/login" class="btn btn-outline-primary btn-lg px-4 py-2">
-                        <span>כניסה למערכת</span>
-                        <span class="material-symbols-outlined align-middle ms-1" style="font-size: 20px;">login</span>
-                    </a>
-                </div>
-
-                <!-- רצועת מדדים בזמן אמת -->
-                <div class="row g-3" style="max-width: 520px;">
-                    <div class="col-4">
-                        <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-10 text-center">
-                            <div class="font-display fw-bold text-secondary h4 mb-0">100%</div>
-                            <small class="text-secondary opacity-75">תאימות לבגרות</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-10 text-center">
-                            <div class="font-display fw-bold text-primary h4 mb-0">5 יח"ל</div>
-                            <small class="text-secondary opacity-75">הנדסת תוכנה</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-10 text-center">
-                            <div class="font-display fw-bold text-success h4 mb-0">C# / DB</div>
-                            <small class="text-secondary opacity-75">מעבדה חיה</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- עמודת הדגמת קוד ובדיקות (col-lg-5) -->
-            <div class="col-12 col-lg-5">
-                <div class="card card-portal p-3 p-md-4 shadow-lg position-relative">
-                    <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-15 pb-2">
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-danger p-1 rounded-circle" style="width: 10px; height: 10px;"></span>
-                            <span class="badge bg-warning p-1 rounded-circle" style="width: 10px; height: 10px;"></span>
-                            <span class="badge bg-success p-1 rounded-circle" style="width: 10px; height: 10px;"></span>
-                            <span class="font-code small text-secondary ms-2" dir="ltr">AlgorithmSolution.cs</span>
-                        </div>
-                        <span class="badge bg-secondary bg-opacity-15 text-secondary font-code small">LIVE RUNNER</span>
-                    </div>
-
-                    <!-- קוד C# לדוגמה -->
-                    <div class="code-box mb-3">
-                        <span class="keyword">public class</span> <span class="type">StudentProject</span><br />
-                        {<br />
-                        &nbsp;&nbsp;<span class="keyword">public async</span> <span class="type">Task</span>&lt;<span class="type">bool</span>&gt; <span class="method">ExecuteAsync</span>()<br />
-                        &nbsp;&nbsp;{<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// יצירת חיבור למסד הנתונים והרצת בדיקות</span><br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">var</span> dal = <span class="keyword">new</span> <span class="type">DatabaseService</span>();<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return await</span> dal.<span class="method">ValidateAllTestsAsync</span>();<br />
-                        &nbsp;&nbsp;}<br />
-                        }
-                    </div>
-
-                    <!-- פס התקדמות והרצת טסטים -->
-                    <div class="p-3 rounded-3 bg-dark border border-secondary border-opacity-10">
-                        <div class="d-flex justify-content-between align-items-center mb-1 small">
-                            <span class="text-light fw-medium">בדיקות יחידה (Unit Tests)</span>
-                            <span class="font-code text-success">8/10 עברו בהצלחה (80%)</span>
-                        </div>
-                        <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-2 small text-secondary opacity-75">
-                            <span>זמן ריצה: 12ms</span>
-                            <span>סטטוס: ממתין להגשה סופית</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- =========================================================================
-     אזור 2: למה זה חשוב עכשיו (עמודי התווך של המגמה)
-     ========================================================================= -->
-<section id="topics" class="py-5 border-top border-bottom border-secondary border-opacity-10" style="background-color: #0c1220;">
+<!-- אזור פתיחה (Hero) -->
+<section class="py-5 text-center">
     <div class="container py-4">
-        <div class="text-center mb-5">
-            <span class="text-primary fw-semibold small text-uppercase tracking-wider">תכנית הלימודים</span>
-            <h2 class="display-6 fw-bold text-light mt-1">עמודי התווך של מגמת מדעי המחשב</h2>
-            <p class="text-secondary opacity-75 mx-auto" style="max-width: 650px;">
-                הכשרה מקיפה המשלבת תיאוריה אקדמית חזקה עם יכולות פיתוח מעשיות ברמה של תעשיית ההייטק.
-            </p>
-        </div>
-
-        <div class="row g-4">
-            <!-- עמודה 1: תכנות מונחה עצמים (OOP) -->
-            <div class="col-12 col-md-4">
-                <div class="card card-portal h-100 p-4">
-                    <div class="icon-box mb-3 bg-primary bg-opacity-15 text-primary">
-                        <span class="material-symbols-outlined">account_tree</span>
-                    </div>
-                    <h3 class="h5 fw-bold text-light mb-2">תכנות מונחה עצמים (OOP)</h3>
-                    <p class="text-secondary opacity-75 small mb-3">
-                        בניית ארכיטקטורת תוכנה מודולרית ב-C#: מחלקות, עצמים, הורשה, פולימורפיזם, ממשקים (Interfaces) ועקרונות קוד נקי.
-                    </p>
-                    <div class="mt-auto pt-2 border-top border-secondary border-opacity-10 d-flex gap-2">
-                        <span class="tag-tech primary small">Classes</span>
-                        <span class="tag-tech primary small">Inheritance</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- עמודה 2: אלגוריתמיקה ומבני נתונים -->
-            <div class="col-12 col-md-4">
-                <div class="card card-portal h-100 p-4">
-                    <div class="icon-box mb-3 bg-secondary bg-opacity-15 text-secondary">
-                        <span class="material-symbols-outlined">data_object</span>
-                    </div>
-                    <h3 class="h5 fw-bold text-light mb-2">אלגוריתמיקה ומבני נתונים</h3>
-                    <p class="text-secondary opacity-75 small mb-3">
-                        פיתוח חשיבה אלגוריתמית מתקדמת: סיבוכיות זמן ומקום, רקורסיה, עצי חיפוש בינאריים, מחסניות, תורים ורשימות מקושרות.
-                    </p>
-                    <div class="mt-auto pt-2 border-top border-secondary border-opacity-10 d-flex gap-2">
-                        <span class="tag-tech secondary small">Big-O</span>
-                        <span class="tag-tech secondary small">Binary Trees</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- עמודה 3: ארכיטקטורת Full-Stack & DB -->
-            <div class="col-12 col-md-4">
-                <div class="card card-portal h-100 p-4">
-                    <div class="icon-box mb-3 bg-success bg-opacity-15 text-success">
-                        <span class="material-symbols-outlined">database</span>
-                    </div>
-                    <h3 class="h5 fw-bold text-light mb-2">פיתוח מערכות ו-MySQL</h3>
-                    <p class="text-secondary opacity-75 small mb-3">
-                        בניית פרויקט גמר מלא: שכבת גישה לנתונים (DAL), שרתי RESTful API, מסדי נתונים יחסיים (SQL) וממשק אינטראקטיבי ב-Blazor.
-                    </p>
-                    <div class="mt-auto pt-2 border-top border-secondary border-opacity-10 d-flex gap-2">
-                        <span class="tag-tech success small">Web API</span>
-                        <span class="tag-tech success small">MySQL</span>
-                    </div>
-                </div>
-            </div>
+        <h1 class="display-4 fw-bold text-primary mb-3">מגמת מדעי המחשב</h1>
+        <p class="lead text-secondary mb-4 mx-auto" style="max-width: 600px;">
+            פלטפורמת למידה, ניהול משימות והגשות אינטראקטיביות לתלמידי ומורי המגמה.
+            שליטה ב-C#, אלגוריתמיקה ופיתוח פרויקטים.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="/register" class="btn btn-primary btn-lg px-4">הרשמה למערכת</a>
+            <a href="/login" class="btn btn-outline-primary btn-lg px-4">כניסה</a>
         </div>
     </div>
 </section>
 
-<!-- =========================================================================
-     אזור 3: סביבת התרגול והמעבדה החיה (2 כרטיסים)
-     ========================================================================= -->
-<section id="exercises" class="py-5">
-    <div class="container py-4">
-        <div class="text-center mb-5">
-            <span class="text-secondary fw-semibold small text-uppercase tracking-wider">סביבת המעבדה</span>
-            <h2 class="display-6 fw-bold text-light mt-1">תרגול מעשי ומשימות בזמן אמת</h2>
-            <p class="text-secondary opacity-75 mx-auto" style="max-width: 650px;">
-                התלמידים מתרגלים קוד אמיתי, מריצים בדיקות מקומיות ומקבלים אינדיקציות מידיות.
-            </p>
-        </div>
-
-        <div class="row g-4">
-            <!-- כרטיס מעבדה 1 -->
-            <div class="col-12 col-lg-6">
-                <div class="card card-portal h-100 overflow-hidden">
-                    <div class="position-relative ratio ratio-16x9">
-                        <img src="@Assets["images/classroom.jpg"]" alt="מעבדת מדעי המחשב" class="w-100 h-100 object-fit-cover" />
-                        <span class="badge rounded-pill bg-primary position-absolute top-0 end-0 m-3 px-3 py-2 shadow">
-                            מעבדה פעילה
-                        </span>
-                    </div>
-                    <div class="card-body p-4">
-                        <h4 class="h5 fw-bold text-light mb-2">עמדות פיתוח משולבות מעבדה</h4>
-                        <p class="text-secondary opacity-75 small mb-3">
-                            סביבת עבודה מקצועית ב-Visual Studio, המשלבת עבודה קבוצתית ואישית, דיבאגינג מתקדם ופתרון בעיות מעשיות.
-                        </p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-secondary small font-code">LAB // WORKSTATIONS</span>
-                            <a href="/register" class="btn btn-outline-primary btn-sm">הצטרפות למעבדה</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- כרטיס מעבדה 2 -->
-            <div class="col-12 col-lg-6">
-                <div class="card card-portal h-100 p-4 d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge rounded-pill bg-info bg-opacity-20 text-info px-3 py-1 font-code">
-                                תרגיל שבועי #04
-                            </span>
-                            <span class="text-secondary small">תאריך הגשה קרוב</span>
-                        </div>
-                        <h4 class="h5 fw-bold text-light mb-2">מימוש עץ חיפוש בינארי (BST) ב-C#</h4>
-                        <p class="text-secondary opacity-75 small mb-3">
-                            משימת תרגול: כתיבת מחלקת צומת (Node), הוספת איברים לרצף ממוין, וסריקת עץ בסדר תוכי (In-order traversal).
-                        </p>
-
-                        <div class="code-box small mb-3">
-                            <span class="keyword">public void</span> <span class="method">Insert</span>(<span class="type">int</span> val) {<br />
-                            &nbsp;&nbsp;<span class="keyword">if</span> (val &lt; Root.Value) Root.Left = <span class="keyword">new</span> <span class="type">Node</span>(val);<br />
-                            }
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-10">
-                        <span class="text-success small fw-medium">
-                            <span class="material-symbols-outlined align-middle" style="font-size: 16px;">verified</span>
-                            כולל בדיקות אוטומטיות
-                        </span>
-                        <a href="/login" class="btn btn-accent btn-sm">לפתרון המשימה</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- =========================================================================
-     אזור 4: איך זה עובד במגמה (4 שלבים)
-     ========================================================================= -->
-<section id="workflow" class="py-5 border-top border-secondary border-opacity-10" style="background-color: #0c1220;">
-    <div class="container py-4">
-        <div class="text-center mb-5">
-            <span class="text-primary fw-semibold small text-uppercase tracking-wider">מסלול ההצלחה</span>
-            <h2 class="display-6 fw-bold text-light mt-1">איך מתנהל תהליך הלמידה במגמה?</h2>
-            <p class="text-secondary opacity-75 mx-auto" style="max-width: 650px;">
-                ארבעה שלבים ברורים המובילים מרעיון תיאורטי למימוש מערכת תוכנה מושלמת.
-            </p>
-        </div>
-
-        <div class="row g-4">
-            <!-- שלב 1 -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card card-portal h-100 p-4 text-center">
-                    <div class="step-num mx-auto mb-3">01</div>
-                    <h3 class="h6 fw-bold text-light mb-2">הרצאה ותיאוריה</h3>
-                    <p class="text-secondary opacity-75 small mb-0">
-                        הבנת הרקע האלגוריתמי, ניתוח דוגמאות מורכבות על הלוח והבנת מבנה הבעיה.
-                    </p>
-                </div>
-            </div>
-
-            <!-- שלב 2 -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card card-portal h-100 p-4 text-center">
-                    <div class="step-num mx-auto mb-3">02</div>
-                    <h3 class="h6 fw-bold text-light mb-2">כתיבת קוד ב-C#</h3>
-                    <p class="text-secondary opacity-75 small mb-0">
-                        יישום עצמאי של הפתרון בסביבת פיתוח, כתיבת מחלקות ופונקציות תקניות.
-                    </p>
-                </div>
-            </div>
-
-            <!-- שלב 3 -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card card-portal h-100 p-4 text-center">
-                    <div class="step-num mx-auto mb-3">03</div>
-                    <h3 class="h6 fw-bold text-light mb-2">הרצת בדיקות ודיבאג</h3>
-                    <p class="text-secondary opacity-75 small mb-0">
-                        העלאת הפתרון למערכת, בדיקה מול מקרי קצה ובדיקות יחידה אוטומטיות.
-                    </p>
-                </div>
-            </div>
-
-            <!-- שלב 4 -->
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card card-portal h-100 p-4 text-center">
-                    <div class="step-num mx-auto mb-3">04</div>
-                    <h3 class="h6 fw-bold text-light mb-2">משוב וציון סופי</h3>
-                    <p class="text-secondary opacity-75 small mb-0">
-                        קבלת הערות ממוקדות ממורי המגמה וצבירת ניקוד להתקדמות שנתית.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- =========================================================================
-     אזור 5: הזמנה לפעולה (Call to Action)
-     ========================================================================= -->
+<!-- אזור נושאי הלימוד -->
 <section class="py-5">
-    <div class="container py-2">
-        <div class="p-5 rounded-4 shadow-lg text-center" style="background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #06b6d4 100%);">
-            <h2 class="display-6 fw-bold text-white mb-3">מוכנים לכתוב את השורה הראשונה?</h2>
-            <p class="text-white text-opacity-90 lead mx-auto mb-4" style="max-width: 600px;">
-                הצטרפו עכשיו למערכת המגמה, גשו לתרגילים ולחומרי הלימוד והתחילו לצבור ניסיון אמיתי בפיתוח תוכנה.
-            </p>
-            <div class="d-flex justify-content-center flex-wrap gap-3">
-                <a href="/register" class="btn btn-light btn-lg px-4 py-2 text-primary fw-bold shadow">
-                    יצירת חשבון תלמיד
-                </a>
-                <a href="/login" class="btn btn-outline-light btn-lg px-4 py-2 fw-semibold">
-                    כניסה לחשבון קיים
-                </a>
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">מה לומדים במגמה?</h2>
+        <div class="row g-4 text-center">
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 p-4 border-0 rounded-4 bg-light">
+                    <h3 class="h5 fw-bold text-primary mb-3">תכנות מונחה עצמים (OOP)</h3>
+                    <p class="text-secondary mb-0">
+                        מחלקות, עצמים, הורשה ופולימורפיזם בשפת C#. בניית קוד נקי ומודולרי.
+                    </p>
+                </div>
             </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 p-4 border-0 rounded-4 bg-light">
+                    <h3 class="h5 fw-bold text-primary mb-3">אלגוריתמיקה ומבני נתונים</h3>
+                    <p class="text-secondary mb-0">
+                        סיבוכיות, רקורסיה, עצי חיפוש, מחסניות ותורים. פיתוח חשיבה לוגית מתקדמת.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 p-4 border-0 rounded-4 bg-light">
+                    <h3 class="h5 fw-bold text-primary mb-3">פיתוח מערכות ו-MySQL</h3>
+                    <p class="text-secondary mb-0">
+                        בניית פרויקט גמר מלא: מסדי נתונים, שרתי API וממשק משתמש ב-Blazor.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- אזור סביבת המעבדה -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">סביבת התרגול והמעבדה</h2>
+        <div class="row justify-content-center g-4">
+
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                    <img src="@Assets["images/classroom.jpg"]" alt="מעבדת מדעי המחשב" class="w-100 h-auto rounded-4" />
+                    <div class="card-body text-center p-4">
+                        <h4 class="h5 fw-bold text-primary mb-2">עמדות פיתוח משולבות</h4>
+                        <p class="text-secondary mb-4">
+                            עבודה מקצועית ב-Visual Studio, דיבאגינג מתקדם ופתרון בעיות מעשיות בזמן אמת.
+                        </p>
+                        <a href="/register" class="btn btn-primary px-4">הצטרפות למעבדה</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
