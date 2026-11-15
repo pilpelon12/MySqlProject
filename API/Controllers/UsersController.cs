@@ -6,85 +6,98 @@ using Model;
 
 namespace API.Controllers
 {
-    // כל בקשה ל- api/users תגיע למחלקה הזו
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly UserDB _userDB;
 
-        // השרת מעביר לפה אוטומטית את UserDB בזכות הרישום שעשינו ב-Program.cs
         public UsersController(UserDB userDB)
         {
             _userDB = userDB;
         }
 
-        // בקשת GET בסיסית: שליפת רשימת כל המשתמשים
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetAllUsers()
         {
             var users = await _userDB.GetAllUsersAsync();
-            return Ok(users); // מחזיר קוד 200 ואת רשימת המשתמשים
+            foreach (var u in users)
+            {
+                u.Password = string.Empty; // ריקון הסיסמה לפני שליחה ללקוח
+            }
+            return Ok(users);
         }
 
-        // בקשת GET עם פרמטר ב-URL (למשל api/users/5)
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<User>> GetUserById(int id)
         {
             var user = await _userDB.GetUserByIdAsync(id);
             if (user == null)
-                return NotFound("User not found."); // מחזיר 404 אם המשתמש לא קיים
+                return NotFound("User not found.");
 
+            user.Password = string.Empty; // ריקון הסיסמה לפני שליחה ללקוח
             return Ok(user);
         }
 
-        // בקשת POST: הוספת משתמש חדש למערכת
-        [HttpPost]
-        public async Task<ActionResult<User>> AddUser([FromBody] CreateUserRequest request)
+        // שלב 1 בהרשמה: בדיקה האם שם משתמש קיים
+        [HttpGet("exists/{username}")]
+        public async Task<ActionResult<bool>> UsernameExists(string username)
         {
-            // בדיקות קדם-הכנסה כדי לא לזרוק שגיאות שרת פנימיות
-            if (await _userDB.UsernameExistsAsync(request.Username))
+            bool exists = await _userDB.UsernameExistsAsync(username);
+            return Ok(exists);
+        }
+
+        // שלב 1 בהרשמה: בדיקה האם אימייל קיים
+        [HttpGet("email-exists/{email}")]
+        public async Task<ActionResult<bool>> EmailExists(string email)
+        {
+            bool exists = await _userDB.EmailExistsAsync(email);
+            return Ok(exists);
+        }
+
+        // שלב 2 בהרשמה: הוספת משתמש חדש למערכת
+        [HttpPost]
+        public async Task<ActionResult<User>> AddUser([FromBody] User newUser)
+        {
+            if (await _userDB.UsernameExistsAsync(newUser.Username))
                 return Conflict("Username is already taken."); // 409
 
-            if (await _userDB.EmailExistsAsync(request.Email))
+            if (await _userDB.EmailExistsAsync(newUser.Email))
                 return Conflict("Email is already taken."); // 409
 
-            // הגדרת תפקיד ברירת מחדל אם לא סופק
-            string role = string.IsNullOrEmpty(request.RoleName) ? "Student" : request.RoleName;
+            string role = string.IsNullOrEmpty(newUser.RoleName) ? "Student" : newUser.RoleName;
 
-            // יצירה ושליפה חזרה
-            int newId = await _userDB.AddUserAsync(request.Username, request.Email, request.Password, role);
+            int newId = await _userDB.AddUserAsync(newUser.Username, newUser.Email, newUser.Password, role);
             var createdUser = await _userDB.GetUserByIdAsync(newId);
 
-            // מחזיר קוד 201 (Created) ומצביע על הנתיב של המשתמש החדש
+            if (createdUser != null)
+                createdUser.Password = string.Empty; // ריקון הסיסמה לפני שליחה חזרה
+
             return CreatedAtAction(nameof(GetUserById), new { id = newId }, createdUser);
         }
 
-        // בקשת POST: התחברות (למרות שאנחנו שולפים מידע, נהוג להשתמש ב-POST כדי להסתיר סיסמאות בגוף הבקשה)
         [HttpPost("login")]
         public async Task<ActionResult<User>> Login([FromBody] LoginRequest request)
         {
             var user = await _userDB.CheckLoginAsync(request.Username, request.Password);
             if (user == null)
-                return Unauthorized("Invalid username or password."); // 401 (שגיאת התחברות)
+                return Unauthorized("Invalid username or password."); // 401
 
+            user.Password = string.Empty; // ריקון הסיסמה לפני שליחה ללקוח
             return Ok(user);
         }
 
-        // בקשת PUT: עדכון סיסמה למשתמש קיים
-        [HttpPut("{id}/password")]
+        [HttpPut("{id:int}/password")]
         public async Task<IActionResult> UpdatePassword(int id, [FromBody] UpdatePasswordRequest request)
         {
             bool updated = await _userDB.UpdatePasswordAsync(id, request.NewPassword);
             if (!updated)
                 return NotFound("User not found.");
 
-            return NoContent(); // 204 (הפעולה הצליחה, אין מידע להחזיר במסך)
+            return NoContent(); // 204
         }
     }
 
-    // אובייקטים קלים (Records) המשמשים רק כ"תבניות" לקבלת המידע מהמשתמש בגוף בקשת ה-HTTP
-    public record CreateUserRequest(string Username, string Email, string Password, string? RoleName = "Student");
     public record LoginRequest(string Username, string Password);
     public record UpdatePasswordRequest(string NewPassword);
 }

@@ -1,4 +1,9 @@
 @page "/register"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using System.Net.Mail
+@using Model
+@inject HttpClient Http
+@inject NavigationManager Navigation
 
 <PageTitle>הרשמה למגמת מדעי המחשב</PageTitle>
 
@@ -9,7 +14,7 @@
             <div class="d-flex align-items-center justify-content-between mb-3 px-1">
                 <div class="d-flex align-items-center gap-1 text-secondary">
                     <span class="material-symbols-outlined" style="font-size: 16px;">terminal</span>
-                    <span class="font-code small text-uppercase">CS_AUTH // REGISTER_v4</span>
+                    <span class="font-code small text-uppercase">CS DEPARTMENT REGISTER PAGE</span>
                 </div>
                 <div class="d-flex align-items-center gap-1">
                     <span class="badge rounded-pill bg-success bg-opacity-25 text-success small">מערכת פעילה</span>
@@ -28,46 +33,72 @@
                     </p>
                 </div>
 
+                @if (errorMessage != null)
+                {
+                    <div class="alert alert-danger" role="alert">@errorMessage</div>
+                }
+
+                @if (isRegistered)
+                {
+                    <div class="alert alert-success" role="status">
+                        <strong>ההרשמה הצליחה!</strong> עוברים לדף הכניסה בעוד @secondsLeft שניות.
+                    </div>
+                }
+
                 <form>
                     <!-- שדה 1: שם משתמש -->
                     <Field Id="reg-username"
                            Label="שם משתמש"
-                           Placeholder="למשל: noam_csharp"
+                           Name="username"
+                           Placeholder="למשל: noam1234"
                            Icon="person"
                            Required="true"
-                           HelpText="באנגלית ובאותיות קטנות" />
+                           HelpText="באנגלית*"
+                           @bind-Value="username" />
 
                     <!-- שדה 2: אימייל (משמאל לימין) -->
                     <Field Id="reg-email"
                            Label="כתובת אימייל"
+                           Name="email"
                            Type="email"
                            Dir="ltr"
                            Placeholder="student@cs-dept.edu"
                            Icon="mail"
-                           Required="true" />
+                           Required="true"
+                           @bind-Value="email" />
 
                     <!-- שדה 3: סיסמה (משמאל לימין) -->
                     <Field Id="reg-password"
                            Label="סיסמה"
+                           Name="password"
                            Type="password"
                            Dir="ltr"
                            Placeholder="לפחות 6 תווים"
                            Icon="lock"
-                           Required="true" />
+                           Required="true"
+                           @bind-Value="password" />
 
                     <!-- שדה 4: אימות סיסמה (משמאל לימין) -->
                     <Field Id="reg-confirm-password"
                            Label="אימות סיסמה"
+                           Name="confirmPassword"
                            Type="password"
                            Dir="ltr"
                            Placeholder="הזינו שוב את הסיסמה"
                            Icon="lock_reset"
-                           Required="true" />
+                           Required="true"
+                           @bind-Value="confirmPassword" />
 
-                    <!-- כפתור הרשמה (בשלב זה type="button" כנדרש בגרסה 4) -->
-                    <button type="button" class="btn btn-primary btn-lg w-100 mt-3 py-2 fw-semibold">
-                        <span class="align-middle">צור חשבון חדש</span>
-                        <span class="material-symbols-outlined align-middle ms-1" style="font-size: 19px;">arrow_back</span>
+                    <!-- כפתור הרשמה -->
+                    <button type="button"
+                            class="btn btn-primary btn-lg w-100 mt-3 py-2 fw-semibold"
+                            disabled="@(isBusy || isRegistered)"
+                            @onclick="RegisterAsync">
+                        <span class="align-middle">@(isBusy ? "בודקים..." : "הרשמה")</span>
+                        @if (!isBusy)
+                        {
+                            <span class="material-symbols-outlined align-middle ms-1" style="font-size: 19px;">arrow_back</span>
+                        }
                     </button>
                 </form>
 
@@ -82,3 +113,92 @@
         </div>
     </div>
 </div>
+
+@code {
+    private string? username;
+    private string? email;
+    private string? password;
+    private string? confirmPassword;
+
+    private string? errorMessage;
+    private bool isBusy = false;
+    private bool isRegistered = false;
+    private int secondsLeft = 5;
+
+    private async Task RegisterAsync()
+    {
+        errorMessage = null;
+
+        // בדיקות קלט, לפני שפונים לשרת
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email)
+            || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
+        {
+            errorMessage = "יש למלא את כל השדות.";
+            return;
+        }
+
+        if (!MailAddress.TryCreate(email.Trim(), out _))
+        {
+            errorMessage = "כתובת האימייל לא תקינה.";
+            return;
+        }
+
+        if (password != confirmPassword)
+        {
+            errorMessage = "הסיסמה ואימות הסיסמה לא זהים.";
+            return;
+        }
+
+        isBusy = true;
+
+        try
+        {
+            // שלב 1, קריאה: שתי בקשות ל-Controller
+            bool usernameExists = await Http.GetFromJsonAsync<bool>(
+                $"api/users/exists/{Uri.EscapeDataString(username.Trim())}");
+            if (usernameExists)
+            {
+                errorMessage = "שם המשתמש כבר תפוס. בחרו שם אחר.";
+                return;
+            }
+
+            bool emailExists = await Http.GetFromJsonAsync<bool>(
+                $"api/users/email-exists/{Uri.EscapeDataString(email.Trim())}");
+            if (emailExists)
+            {
+                errorMessage = "האימייל הזה כבר רשום במערכת.";
+                return;
+            }
+
+            // שלב 2, כתיבה: בקשה אחת ל-Controller
+            User newUser = new User(username.Trim(), email.Trim(), password);
+            HttpResponseMessage response = await Http.PostAsJsonAsync("api/users", newUser);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                errorMessage = "ההרשמה נכשלה. נסו שוב.";
+                return;
+            }
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "השרת לא זמין כרגע. נסו שוב בעוד רגע.";
+            return;
+        }
+        finally
+        {
+            isBusy = false;
+        }
+
+        // הצלחה: ספירה לאחור ומעבר לדף הכניסה
+        isRegistered = true;
+        while (secondsLeft > 0)
+        {
+            StateHasChanged();
+            await Task.Delay(1000);
+            secondsLeft--;
+        }
+
+        Navigation.NavigateTo("login");
+    }
+}

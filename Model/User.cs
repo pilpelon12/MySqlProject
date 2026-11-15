@@ -24,7 +24,6 @@ namespace Model
         }
 
         // בנאי לשליפת משתמש קיים ממסד הנתונים (כולל הכל)
-        // base(id) שולח את המזהה למחלקת האב BaseEntity
         public User(int id, string username, string email, string password, int roleId, string roleName, bool isActive, DateTime createdAt)
             : base(id)
         {
