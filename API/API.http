@@ -23,3 +23,15 @@ Content-Type: application/json
   "password": "Password123!",
   "roleName": "Student"
 }
+
+### שליפת משתמש לפי מזהה
+GET {{API_HostAddress}}/api/users/1
+Accept: application/json
+
+### עדכון סיסמה
+PUT {{API_HostAddress}}/api/users/1/password
+Content-Type: application/json
+
+{
+  "newPassword": "NewStrongPassword123!"
+}

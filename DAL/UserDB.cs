@@ -139,7 +139,7 @@ namespace DAL
             using var cmd = new MySqlCommand(sql, connection);
 
             using var reader = await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync()) // הלולאה עוברת שורה-שורה
+            while (await reader.ReadAsync()) // הלולאה עוברת שורה שורה
             {
                 users.Add(ReadUser(reader));
             }

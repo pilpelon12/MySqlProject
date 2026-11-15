@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Model
 {
@@ -6,6 +7,7 @@ namespace Model
     {
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        [JsonIgnore]
         public string Password { get; set; } = string.Empty;
         public int RoleId { get; set; }
         public string RoleName { get; set; } = string.Empty; // נשלף מטבלת Roles
