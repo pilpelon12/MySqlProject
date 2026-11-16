@@ -83,7 +83,7 @@ namespace API.Controllers
             if (user == null)
                 return Unauthorized("Invalid username or password."); // 401
 
-            user.Password = string.Empty; // ריקון הסיסמה לפני שליחה ללקוח
+            user.Password = string.Empty; // ריקון הגיבוב כדי שלא ייחשף ללקוח
             return Ok(user);
         }
 

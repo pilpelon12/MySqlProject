@@ -38,7 +38,7 @@ namespace DAL
             );
         }
 
-        // הוספת משתמש. הפקודה LAST_INSERT_ID מחזירה את ה-Id שהמספור האוטומטי נתן לו
+        // הוספת משתמש. הסיסמה עוברת גיבוב לפני השמירה.
         public async Task<int> AddUserAsync(string username, string email, string password, string roleName = "Student")
         {
             using var connection = new MySqlConnection(_connectionString);
@@ -52,7 +52,7 @@ namespace DAL
             using var cmd = new MySqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("@Username", username);
             cmd.Parameters.AddWithValue("@Email", email);
-            cmd.Parameters.AddWithValue("@Password", password);
+            cmd.Parameters.AddWithValue("@Password", BCrypt.Net.BCrypt.HashPassword(password));
             cmd.Parameters.AddWithValue("@RoleName", roleName);
 
             object? result = await cmd.ExecuteScalarAsync();
@@ -87,7 +87,7 @@ namespace DAL
             return count > 0;
         }
 
-        // התחברות: בודק אם המשתמש קיים ופעיל (IsActive = TRUE)
+        // התחברות: בודק אם המשתמש קיים, ואז מוודא את הסיסמה מול הגיבוב השמור
         public async Task<User?> CheckLoginAsync(string username, string password)
         {
             using var connection = new MySqlConnection(_connectionString);
@@ -101,8 +101,8 @@ namespace DAL
             if (await reader.ReadAsync())
             {
                 User user = ReadUser(reader);
-                // אנו משווים את הסיסמה בקוד (C#) ולא בשאילתה, כי MySQL לא מבדיל כברירת מחדל בין אותיות גדולות לקטנות
-                if (user.Password == password)
+                // בדיקת הסיסמה בעזרת BCrypt Verify מול הגיבוב מהמסד
+                if (BCrypt.Net.BCrypt.Verify(password, user.Password))
                 {
                     return user;
                 }
@@ -146,7 +146,7 @@ namespace DAL
             return users;
         }
 
-        // עדכון סיסמה
+        // עדכון סיסמה: הסיסמה החדשה גם עוברת גיבוב
         public async Task<bool> UpdatePasswordAsync(int userId, string newPassword)
         {
             using var connection = new MySqlConnection(_connectionString);
@@ -154,7 +154,7 @@ namespace DAL
 
             string sql = "UPDATE Users SET PasswordHash = @Password WHERE Id = @Id;";
             using var cmd = new MySqlCommand(sql, connection);
-            cmd.Parameters.AddWithValue("@Password", newPassword);
+            cmd.Parameters.AddWithValue("@Password", BCrypt.Net.BCrypt.HashPassword(newPassword));
             cmd.Parameters.AddWithValue("@Id", userId);
 
             // מחזיר את כמות השורות שהשתנו. אם זה גדול מ-0, זה אומר שהעדכון הצליח

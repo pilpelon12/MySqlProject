@@ -132,7 +132,7 @@ namespace DAL
                 await insertRolesCmd.ExecuteNonQueryAsync();
             }
 
-            // 2. הזנת משתמשים
+            // 2. הזנת משתמשים התחלתיים עם סיסמאות מגובבות
             await SeedUsersAsync(connection);
 
             // 3. הזנת נושא לימוד ראשוני
@@ -158,18 +158,21 @@ namespace DAL
 
             string insertSql = @"
                 INSERT INTO Users (Username, Email, PasswordHash, RoleId) VALUES
-                ('admin_coordinator', 'admin@cs-dept.edu', 'Admin123!', 1),
-                ('teacher_dan', 'dan@cs-dept.edu', 'Teach123!', 2),
-                ('teacher_rona', 'rona@cs-dept.edu', 'Teach123!', 2),
-                ('student_noam', 'noam@student.edu', 'Stud123!', 3),
-                ('student_maya', 'maya@student.edu', 'Stud123!', 3),
-                ('student_itay', 'itay@student.edu', 'Stud123!', 3),
-                ('student_shira', 'shira@student.edu', 'Stud123!', 3),
-                ('student_omer', 'omer@student.edu', 'Stud123!', 3),
-                ('student_yael', 'yael@student.edu', 'Stud123!', 3),
-                ('student_guy', 'guy@student.edu', 'Stud123!', 3);";
+                (@Username1, @Email1, @Hash1, (SELECT RoleId FROM Roles WHERE RoleName = 'Admin')),
+                (@Username2, @Email2, @Hash2, (SELECT RoleId FROM Roles WHERE RoleName = 'Student'));";
 
             using var insertCmd = new MySqlCommand(insertSql, connection);
+
+            // יצירת מנהל התחלתי
+            insertCmd.Parameters.AddWithValue("@Username1", "admin");
+            insertCmd.Parameters.AddWithValue("@Email1", "admin@cs-dept.edu");
+            insertCmd.Parameters.AddWithValue("@Hash1", BCrypt.Net.BCrypt.HashPassword("admin"));
+
+            // יצירת תלמיד התחלתי
+            insertCmd.Parameters.AddWithValue("@Username2", "user");
+            insertCmd.Parameters.AddWithValue("@Email2", "user@student.edu");
+            insertCmd.Parameters.AddWithValue("@Hash2", BCrypt.Net.BCrypt.HashPassword("user"));
+
             await insertCmd.ExecuteNonQueryAsync();
         }
     }
