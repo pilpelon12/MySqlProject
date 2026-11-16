@@ -1,0 +1,27 @@
+﻿@page "/teacher-dashboard"
+@inject View.Services.UserSession Session
+@inject NavigationManager Navigation
+
+<PageTitle>אזור מורים</PageTitle>
+
+@if (Session.IsLoggedIn && Session.RoleName == "Teacher")
+{
+    <div class="container py-5">
+        <h1 class="text-light">דף הבית - מורה</h1>
+        <p class="text-secondary">כאן יוצג התוכן של סגל ההוראה (יעוצב בשלב 9).</p>
+    </div>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (Session.IsLoggedIn == false)
+        {
+            Navigation.NavigateTo("/login");
+        }
+        else if (Session.RoleName != "Teacher")
+        {
+            Navigation.NavigateTo("/access-denied");
+        }
+    }
+}

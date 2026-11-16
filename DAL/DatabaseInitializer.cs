@@ -157,21 +157,27 @@ namespace DAL
             if (count > 0) return;
 
             string insertSql = @"
-                INSERT INTO Users (Username, Email, PasswordHash, RoleId) VALUES
-                (@Username1, @Email1, @Hash1, (SELECT RoleId FROM Roles WHERE RoleName = 'Admin')),
-                (@Username2, @Email2, @Hash2, (SELECT RoleId FROM Roles WHERE RoleName = 'Student'));";
+        INSERT INTO Users (Username, Email, PasswordHash, RoleId) VALUES
+        (@Username1, @Email1, @Hash1, (SELECT RoleId FROM Roles WHERE RoleName = 'Admin')),
+        (@Username2, @Email2, @Hash2, (SELECT RoleId FROM Roles WHERE RoleName = 'Teacher')),
+        (@Username3, @Email3, @Hash3, (SELECT RoleId FROM Roles WHERE RoleName = 'Student'));";
 
             using var insertCmd = new MySqlCommand(insertSql, connection);
 
-            // יצירת מנהל התחלתי
+            // 1. יצירת מנהל התחלתי
             insertCmd.Parameters.AddWithValue("@Username1", "admin");
             insertCmd.Parameters.AddWithValue("@Email1", "admin@cs-dept.edu");
             insertCmd.Parameters.AddWithValue("@Hash1", BCrypt.Net.BCrypt.HashPassword("admin"));
 
-            // יצירת תלמיד התחלתי
-            insertCmd.Parameters.AddWithValue("@Username2", "user");
-            insertCmd.Parameters.AddWithValue("@Email2", "user@student.edu");
-            insertCmd.Parameters.AddWithValue("@Hash2", BCrypt.Net.BCrypt.HashPassword("user"));
+            // 2. יצירת מורה התחלתי
+            insertCmd.Parameters.AddWithValue("@Username2", "teacher");
+            insertCmd.Parameters.AddWithValue("@Email2", "teacher@cs-dept.edu");
+            insertCmd.Parameters.AddWithValue("@Hash2", BCrypt.Net.BCrypt.HashPassword("teacher"));
+
+            // 3. יצירת תלמיד התחלתי
+            insertCmd.Parameters.AddWithValue("@Username3", "user");
+            insertCmd.Parameters.AddWithValue("@Email3", "user@student.edu");
+            insertCmd.Parameters.AddWithValue("@Hash3", BCrypt.Net.BCrypt.HashPassword("user"));
 
             await insertCmd.ExecuteNonQueryAsync();
         }

@@ -1,0 +1,32 @@
+﻿@page "/admin-dashboard"
+@inject View.Services.UserSession Session
+@inject NavigationManager Navigation
+
+<PageTitle>פאנל ניהול</PageTitle>
+
+@if (Session.IsLoggedIn && Session.RoleName == "Admin")
+{
+    <div class="container py-5">
+        <h1 class="text-light">דף הבית - מנהלת המגמה</h1>
+        <p class="text-secondary">כאן יוצג התוכן של מנהל המערכת (יעוצב בשלב 9).</p>
+    </div>
+}
+
+@code {
+    // הפעולה רצה כשהדף נטען
+    protected override void OnInitialized()
+    {
+        // בדיקה: האם המשתמש בכלל מחובר?
+        if (Session.IsLoggedIn == false)
+        {
+            // אם לא, מעבירים לדף הכניסה
+            Navigation.NavigateTo("/login");
+        }
+        // בדיקה: האם המשתמש מחובר אבל אינו מנהל?
+        else if (Session.RoleName != "Admin")
+        {
+            // אם התפקיד לא מתאים, מעבירים לדף חסימת גישה
+            Navigation.NavigateTo("/access-denied");
+        }
+    }
+}

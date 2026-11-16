@@ -135,18 +135,37 @@
             }
 
             // שומרים בשירות. מכאן כל הדפים יודעים מי מחובר
+            // שומרים בשירות. מכאן כל הדפים יודעים מי מחובר
             Session.Login(user);
+
+            // שלב 8: ניתוב לפי התפקיד של המשתמש שהתחבר
+            if (user.RoleName == "Admin")
+            {
+                Navigation.NavigateTo("/admin-dashboard");
+            }
+            else if (user.RoleName == "Teacher")
+            {
+                Navigation.NavigateTo("/teacher-dashboard");
+            }
+            else if (user.RoleName == "Student")
+            {
+                Navigation.NavigateTo("/student-dashboard");
+            }
+            else
+            {
+                // אם התפקיד לא מוכר, מעבירים לדף הראשי
+                Navigation.NavigateTo("");
+            }
         }
         catch (HttpRequestException)
         {
             errorMessage = "השרת לא זמין כרגע. נסו שוב בעוד רגע.";
-            return;
         }
         finally
         {
             isBusy = false;
         }
-
-        Navigation.NavigateTo("");
+    }
+}
     }
 }

@@ -1,0 +1,27 @@
+﻿@page "/student-dashboard"
+@inject View.Services.UserSession Session
+@inject NavigationManager Navigation
+
+<PageTitle>אזור תלמידים</PageTitle>
+
+@if (Session.IsLoggedIn && Session.RoleName == "Student")
+{
+    <div class="container py-5">
+        <h1 class="text-light">דף הבית - תלמיד</h1>
+        <p class="text-secondary">כאן יוצג אזור הלמידה האישי שלך (יעוצב בשלב 9).</p>
+    </div>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (Session.IsLoggedIn == false)
+        {
+            Navigation.NavigateTo("/login");
+        }
+        else if (Session.RoleName != "Student")
+        {
+            Navigation.NavigateTo("/access-denied");
+        }
+    }
+}
