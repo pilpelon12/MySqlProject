@@ -1,0 +1,71 @@
+﻿@page "/manage-users"
+@inject View.Services.UserSession Session
+@inject NavigationManager Navigation
+
+<PageTitle>ניהול משתמשים | מגמת מחשבים</PageTitle>
+
+@if (Session.IsLoggedIn && Session.RoleName == "Admin")
+{
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 text-light mb-1">ניהול משתמשים במערכת</h1>
+                <p class="text-secondary mb-0">צפייה ועריכה של משתמשי המגמה (נתוני הדגמה).</p>
+            </div>
+            <a href="/admin-dashboard" class="btn btn-outline-secondary btn-sm">חזרה לדשבורד</a>
+        </div>
+
+        <div class="card card-portal p-0 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-portal table-borderless mb-0">
+                    <thead>
+                        <tr>
+                            <th>מזהה</th>
+                            <th>שם משתמש</th>
+                            <th>אימייל</th>
+                            <th>תפקיד</th>
+                            <th>סטטוס</th>
+                            <th>פעולות</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- נתונים סטטיים לצורך עיצוב בלבד -->
+                        <tr>
+                            <td>1</td>
+                            <td>admin_coordinator</td>
+                            <td>admin@cs-dept.edu</td>
+                            <td><span class="badge bg-danger bg-opacity-25 text-danger">מנהל</span></td>
+                            <td><span class="badge bg-success bg-opacity-25 text-success">פעיל</span></td>
+                            <td><button class="btn btn-sm btn-outline-secondary">ערוך</button></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>teacher_dan</td>
+                            <td>dan@cs-dept.edu</td>
+                            <td><span class="badge bg-warning bg-opacity-25 text-warning">מורה</span></td>
+                            <td><span class="badge bg-success bg-opacity-25 text-success">פעיל</span></td>
+                            <td><button class="btn btn-sm btn-outline-secondary">ערוך</button></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>student_noam</td>
+                            <td>noam@student.edu</td>
+                            <td><span class="badge bg-info bg-opacity-25 text-info">תלמיד</span></td>
+                            <td><span class="badge bg-success bg-opacity-25 text-success">פעיל</span></td>
+                            <td><button class="btn btn-sm btn-outline-secondary">ערוך</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    // הגנת ניתוב למנהל בלבד
+    protected override void OnInitialized()
+    {
+        if (!Session.IsLoggedIn) Navigation.NavigateTo("/login");
+        else if (Session.RoleName != "Admin") Navigation.NavigateTo("/access-denied");
+    }
+}

@@ -315,3 +315,53 @@ code, pre, .font-code {
     top: 0.75rem;
     color: #ffe4e6;
 }
+
+/* --- עיצובים משותפים לגרסה 9 --- */
+
+/* כרטיס מידע לדשבורד (לשימוש חוזר) */
+.card-dashboard {
+    background-color: #121826;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card-dashboard:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+.icon-dashboard {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* טבלאות ניהול (לשימוש חוזר) */
+.table-portal {
+    color: #e2e8f0;
+    vertical-align: middle;
+}
+
+    .table-portal thead th {
+        background-color: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 1rem;
+    }
+
+    .table-portal tbody td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+    }
+
+    .table-portal tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.02);
+    }

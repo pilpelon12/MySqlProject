@@ -1,0 +1,29 @@
+﻿<!--
+  רכיב משותף להצגת נתונים סטטיסטיים בדשבורד.
+  מיועד לשימוש חוזר בדפים של המנהל, המורה והתלמיד.
+-->
+<div class="card card-dashboard p-4 h-100">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h6 class="text-secondary mb-1">@Title</h6>
+            <h2 class="text-light fw-bold mb-0">@Value</h2>
+        </div>
+        <div class="icon-dashboard bg-@ColorClass bg-opacity-10 text-@ColorClass">
+            <span class="material-symbols-outlined">@Icon</span>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string Value { get; set; } = "";
+
+    [Parameter]
+    public string Icon { get; set; } = "analytics";
+
+    [Parameter]
+    public string ColorClass { get; set; } = "primary"; // primary, success, warning, info
+}

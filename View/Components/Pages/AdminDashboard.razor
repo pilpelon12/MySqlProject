@@ -2,31 +2,46 @@
 @inject View.Services.UserSession Session
 @inject NavigationManager Navigation
 
-<PageTitle>פאנל ניהול</PageTitle>
+<PageTitle>פאנל ניהול | מגמת מחשבים</PageTitle>
 
 @if (Session.IsLoggedIn && Session.RoleName == "Admin")
 {
     <div class="container py-5">
-        <h1 class="text-light">דף הבית - מנהלת המגמה</h1>
-        <p class="text-secondary">כאן יוצג התוכן של מנהל המערכת (יעוצב בשלב 9).</p>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 text-light mb-1">פאנל ניהול מערכת</h1>
+                <p class="text-secondary mb-0">סקירה כללית של פעילות המגמה וניהול משתמשים.</p>
+            </div>
+            <a href="/manage-users" class="btn btn-primary d-none d-md-block">
+                <span class="material-symbols-outlined align-middle me-1" style="font-size: 18px;">manage_accounts</span>
+                ניהול משתמשים
+            </a>
+        </div>
+
+        <!-- שימוש ברכיב המשותף לכרטיסיות נתונים מזויפים -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 col-md-4">
+                <DashboardCard Title="סה״כ תלמידים" Value="142" Icon="school" ColorClass="info" />
+            </div>
+            <div class="col-12 col-md-4">
+                <DashboardCard Title="מורים פעילים" Value="8" Icon="co_present" ColorClass="success" />
+            </div>
+            <div class="col-12 col-md-4">
+                <DashboardCard Title="תרגילים במערכת" Value="34" Icon="assignment" ColorClass="warning" />
+            </div>
+        </div>
+
+        <!-- כפתור מותאם למובייל -->
+        <div class="d-block d-md-none mt-4">
+            <a href="/manage-users" class="btn btn-primary w-100">ניהול משתמשים</a>
+        </div>
     </div>
 }
 
 @code {
-    // הפעולה רצה כשהדף נטען
     protected override void OnInitialized()
     {
-        // בדיקה: האם המשתמש בכלל מחובר?
-        if (Session.IsLoggedIn == false)
-        {
-            // אם לא, מעבירים לדף הכניסה
-            Navigation.NavigateTo("/login");
-        }
-        // בדיקה: האם המשתמש מחובר אבל אינו מנהל?
-        else if (Session.RoleName != "Admin")
-        {
-            // אם התפקיד לא מתאים, מעבירים לדף חסימת גישה
-            Navigation.NavigateTo("/access-denied");
-        }
+        if (!Session.IsLoggedIn) Navigation.NavigateTo("/login");
+        else if (Session.RoleName != "Admin") Navigation.NavigateTo("/access-denied");
     }
 }
