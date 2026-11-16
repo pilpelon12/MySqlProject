@@ -20,14 +20,23 @@
     <link rel="stylesheet" href="@Assets["View.styles.css"]" />
     <ImportMap />
     <link rel="icon" type="image/png" href="favicon.jpg" />
-    <HeadOutlet />
+
+    <!-- הגדרת רינדור שרת כדי לשמור על החיבור רציף -->
+    <HeadOutlet @rendermode="pageRenderMode" />
 </head>
 
 <body>
-    <Routes />
+    <!-- הגדרת רינדור שרת גם לניתוב הדפים -->
+    <Routes @rendermode="pageRenderMode" />
     <ReconnectModal />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script src="@Assets["lib/bootstrap/dist/js/bootstrap.bundle.min.js"]"></script>
 </body>
 
 </html>
+
+@code {
+    private static readonly IComponentRenderMode pageRenderMode =
+        new InteractiveServerRenderMode(prerender: false);
+}
+```[cite: 107, 108]

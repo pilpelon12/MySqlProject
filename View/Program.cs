@@ -11,6 +11,9 @@ string apiBaseUrl = builder.Configuration["ApiBaseUrl"]
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
 
+// רישום השירות שזוכר את המשתמש המחובר (לכל לשונית בנפרד) - גרסה 6
+builder.Services.AddScoped<View.Services.UserSession>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

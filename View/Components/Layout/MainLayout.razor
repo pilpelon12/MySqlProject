@@ -1,4 +1,7 @@
 @inherits LayoutComponentBase
+@implements IDisposable
+@inject UserSession Session
+@inject NavigationManager Navigation
 
 <div class="d-flex flex-column min-vh-100">
     <!-- Navbar עליון קבוע -->
@@ -6,7 +9,7 @@
         <div class="container d-flex justify-content-between align-items-center py-2">
             <div class="d-flex align-items-center gap-3">
                 <Logo />
-                
+
                 <nav class="d-none d-md-flex align-items-center gap-1 ms-3">
                     <a href="/" class="nav-link-portal">ראשי</a>
                     <a href="#topics" class="nav-link-portal">נושאי לימוד</a>
@@ -16,8 +19,17 @@
             </div>
 
             <div class="d-flex align-items-center gap-2">
-                <a href="/login" class="btn btn-outline-primary btn-sm px-3">כניסה למערכת</a>
-                <a href="/register" class="btn btn-primary btn-sm px-3">הרשמה למגמה</a>
+                @if (Session.IsLoggedIn)
+                {
+                    <span class="text-light fw-semibold small me-2 d-none d-sm-inline">שלום, @Session.Username</span>
+                    <button class="btn btn-outline-danger btn-sm px-3" type="button" @onclick="Logout">יציאה</button>
+                }
+                else
+                {
+                    <span class="text-secondary opacity-75 small d-none d-sm-inline me-1">שלום, אורח</span>
+                    <a href="/login" class="btn btn-outline-primary btn-sm px-3">כניסה למערכת</a>
+                    <a href="/register" class="btn btn-primary btn-sm px-3">הרשמה למגמה</a>
+                }
             </div>
         </div>
     </header>
@@ -61,3 +73,30 @@
     <a href="." class="reload">רענן דף</a>
     <span class="dismiss">✕</span>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        // נרשמים לאירוע
+        Session.OnChange += OnSessionChanged;
+    }
+
+    private void OnSessionChanged()
+    {
+        // מעדכנים את הסרגל
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void Logout()
+    {
+        Session.Logout();
+        Navigation.NavigateTo("");
+    }
+
+    public void Dispose()
+    {
+        // מבטלים את ההרשמה
+        Session.OnChange -= OnSessionChanged;
+    }
+}
+```[cite: 89, 90, 91, 92, 93, 94, 95, 96, 98, 100]

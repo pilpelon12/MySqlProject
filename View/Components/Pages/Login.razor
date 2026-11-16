@@ -1,4 +1,9 @@
 @page "/login"
+@using System.Net
+@using Model
+@inject HttpClient Http
+@inject UserSession Session
+@inject NavigationManager Navigation
 
 <PageTitle>כניסה למגמת מדעי המחשב</PageTitle>
 
@@ -12,7 +17,7 @@
                     <span class="font-code small text-uppercase">CS.ACADEMY // LOGIN_PORTAL</span>
                 </div>
                 <div class="d-flex align-items-center gap-1">
-                    <span class="badge rounded-pill bg-info bg-opacity-25 text-info small">גרסה 4</span>
+                    <span class="badge rounded-pill bg-info bg-opacity-25 text-info small">גרסה 6</span>
                 </div>
             </div>
 
@@ -28,13 +33,19 @@
                     </p>
                 </div>
 
+                @if (errorMessage != null)
+                {
+                    <div class="alert alert-danger mb-3 small" role="alert">@errorMessage</div>
+                }
+
                 <form>
                     <!-- שדה 1: שם משתמש או אימייל -->
                     <Field Id="login-username"
                            Label="שם משתמש או אימייל"
                            Placeholder="למשל: student_noam או אימייל"
                            Icon="person"
-                           Required="true" />
+                           Required="true"
+                           @bind-Value="username" />
 
                     <!-- שדה 2: סיסמה (משמאל לימין) -->
                     <Field Id="login-password"
@@ -43,7 +54,8 @@
                            Dir="ltr"
                            Placeholder="••••••••"
                            Icon="lock"
-                           Required="true" />
+                           Required="true"
+                           @bind-Value="password" />
 
                     <!-- זכור אותי וקישור שכחתי סיסמה -->
                     <div class="d-flex justify-content-between align-items-center mb-3 small">
@@ -58,9 +70,9 @@
                         </a>
                     </div>
 
-                    <!-- כפתור כניסה (בשלב זה type="button" כנדרש בגרסה 4) -->
-                    <button type="button" class="btn btn-primary btn-lg w-100 mt-2 py-2 fw-semibold">
-                        <span class="align-middle">התחברות למערכת</span>
+                    <!-- כפתור כניסה -->
+                    <button type="button" class="btn btn-primary btn-lg w-100 mt-2 py-2 fw-semibold" disabled="@isBusy" @onclick="LoginAsync">
+                        <span class="align-middle">@(isBusy ? "מתחבר..." : "התחברות למערכת")</span>
                         <span class="material-symbols-outlined align-middle ms-1" style="font-size: 19px;">login</span>
                     </button>
                 </form>
@@ -76,3 +88,65 @@
         </div>
     </div>
 </div>
+
+@code {
+    private string? username;
+    private string? password;
+    private string? errorMessage;
+    private bool isBusy = false;
+
+    private async Task LoginAsync()
+    {
+        errorMessage = null;
+
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            errorMessage = "יש למלא שם משתמש וסיסמה.";
+            return;
+        }
+
+        isBusy = true;
+
+        try
+        {
+            // שולחים לבקר את השם והסיסמה
+            User credentials = new User { Username = username.Trim(), Password = password };
+            HttpResponseMessage response = await Http.PostAsJsonAsync("api/users/login", credentials);
+
+            // קוד 401: השם או הסיסמה שגויים
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                errorMessage = "שם המשתמש או הסיסמה שגויים.";
+                return;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                errorMessage = "הכניסה נכשלה. נסו שוב.";
+                return;
+            }
+
+            // הבקר החזיר את המשתמש עם התפקיד שלו
+            User? user = await response.Content.ReadFromJsonAsync<User>();
+            if (user == null)
+            {
+                errorMessage = "הכניסה נכשלה. נסו שוב.";
+                return;
+            }
+
+            // שומרים בשירות. מכאן כל הדפים יודעים מי מחובר
+            Session.Login(user);
+        }
+        catch (HttpRequestException)
+        {
+            errorMessage = "השרת לא זמין כרגע. נסו שוב בעוד רגע.";
+            return;
+        }
+        finally
+        {
+            isBusy = false;
+        }
+
+        Navigation.NavigateTo("");
+    }
+}
